@@ -10,6 +10,10 @@ use utils::*;
 #[command(version, about, long_about = None)]
 #[command(propagate_version = true)]
 struct Cli {
+    /// Customized header to send with query
+    #[arg(long)]
+    header: Vec<String>,
+
     #[command(subcommand)]
     command: Commands,
 }
@@ -25,9 +29,10 @@ enum Commands {
 #[tokio::main]
 async fn main() -> Result<()> {
     let cli = Cli::parse();
+
     match cli.command {
-        Commands::Get(args) => http_client::get(&args).await?,
-        Commands::Post(args) => http_client::post(&args).await?,
+        Commands::Get(args) => http_client::get(&args, cli.header).await?,
+        Commands::Post(args) => http_client::post(&args, cli.header).await?,
     };
 
     Ok(())
