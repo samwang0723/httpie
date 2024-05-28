@@ -18,11 +18,13 @@ static API_CLIENT: Lazy<reqwest::Client> = Lazy::new(|| {
 });
 
 pub async fn get(args: &Get, headers: Vec<String>) -> Result<()> {
-    let resp = API_CLIENT
+    let request = API_CLIENT
         .get(&args.url)
         .headers(compute_headers(headers))
-        .send()
-        .await?;
+        .build()?;
+    let _ = print_request(&request);
+
+    let resp = API_CLIENT.execute(request).await?;
     print_resp(resp).await
 }
 
@@ -32,12 +34,14 @@ pub async fn post(args: &Post, headers: Vec<String>) -> Result<()> {
         body.insert(&kv.k, &kv.v);
     }
 
-    let resp = API_CLIENT
+    let request = API_CLIENT
         .post(&args.url)
         .headers(compute_headers(headers))
         .json(&body)
-        .send()
-        .await?;
+        .build()?;
+    let _ = print_request(&request);
+
+    let resp = API_CLIENT.execute(request).await?;
     print_resp(resp).await
 }
 
