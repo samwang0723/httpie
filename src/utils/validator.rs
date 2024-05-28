@@ -1,6 +1,3 @@
-#[cfg(test)]
-use super::*;
-
 use anyhow::Result;
 use reqwest::Url;
 
@@ -11,21 +8,26 @@ pub fn parse_url(s: &str) -> Result<String> {
     Ok(s.into())
 }
 
-#[test]
-fn test_parse_kv_invalid() {
-    let kv_str = "invalid_kv";
-    let result = parse_kv(kv_str);
-    assert!(result.is_err());
-}
-
 pub fn parse_kv(s: &str) -> Result<KvPair> {
     s.parse()
 }
 
-#[test]
-fn test_parse_url_valid() {
-    let url = "https://www.example.com";
-    let result = parse_url(url);
-    assert!(result.is_ok());
-    assert_eq!(result.unwrap(), url);
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_parse_kv_invalid() {
+        let kv_str = "invalid_kv";
+        let result = parse_kv(kv_str);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_parse_url_valid() {
+        let url = "https://www.example.com";
+        let result = parse_url(url);
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap(), url);
+    }
 }
