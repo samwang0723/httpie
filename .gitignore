@@ -3,3 +3,7 @@
 .env
 secret.yml
 .DS_Store
+cobertura.xml
+generated_prompt.md
+test_results.html
+run.log
